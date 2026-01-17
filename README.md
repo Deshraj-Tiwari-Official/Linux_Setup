@@ -1,88 +1,134 @@
-# Fedora Powerhouse Setup Guide
+# Powerhouse Distro Setup Guide
 
-Hello there, ready to start your journey of setting up your **Fedora Powerhouse**? This guide will walk you through every step to get your Fedora system up and running with a fully customized development environment. Just follow these steps, and you'll be there in no time!
+Welcome to the **Powerhouse Distro Setup Guide**! 🚀
+This guide will help you set up **any Linux distro** with a fully customized development environment. Follow the steps below, and your system will be ready for hardcore development in no time.
 
 > [!NOTE]
-> To paste the commands in the terminal, use `Ctrl+Shift+V`.
+> To paste commands in the terminal, use `Ctrl+Shift+V`.
 
 ---
 
-## **Step 1: Install Fedora Workstation**
+## Step 1: Install Your Linux Distro
 
-1. Download the Fedora Workstation ISO file from the [official Fedora website](https://getfedora.org/).
-2. Create a bootable USB drive using tools like \*\*Rufus, Etcher, Ventoy (Recommended)\*\*
-3. Boot your system from the USB drive and follow the installation instructions to set up Fedora (You must have a phone that supports USB Tethering with a USB cable that supports it as well to install Fedora as you cannot connect to wifi while installing it)
+1. Download the ISO of your preferred distro from its official website:
+
+   * **Fedora Workstation**: [getfedora.org](https://getfedora.org/)
+   * **Arch Linux**: [archlinux.org](https://archlinux.org/)
+   * Others: check your distro’s official site.
+2. Create a bootable USB drive using tools like **Rufus, Etcher, Ventoy** (Ventoy is recommended).
+3. Boot from the USB drive and follow the installation instructions.
+
+   > ⚠️ Note: Some distros may require a temporary internet connection during installation (USB tethering works if Wi-Fi drivers aren’t available yet).
 
 ---
 
-## **Step 2: Optimize DNF Configuration**
+## Step 2: Optimize Your Package Manager
 
-Make your package manager faster by tweaking its configuration:
+Make package downloads faster by tweaking your distro’s package manager configuration:
 
-1. Open the DNF configuration file:
+**Examples:**
+
+* **Fedora (DNF)**
+
 ```bash
 sudo nano /etc/dnf/dnf.conf
 ```
-2. Add the following lines at the end of the file:
+
+Add at the end:
+
 ```
 max_parallel_downloads=7
 fastestmirror=True
 ```
-3. Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
+
+* **Arch (Pacman)**
+
+```bash
+sudo nano /etc/pacman.conf
+```
+
+Uncomment or add:
+
+```
+ParallelDownloads = 5
+```
 
 ---
 
-## **Step 3: Update Your System**
+## Step 3: Update Your System
 
-After installation, update your system to ensure you have the latest packages:
+After installation, make sure your system has the latest packages:
+
+**Fedora:**
 
 ```bash
 sudo dnf update -y
 ```
 
----
-
-## **Step 4: Add RPM Fusion Repositories (Free and Non-Free)**
+**Arch:**
 
 ```bash
-sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm 
+sudo pacman -Syu
+```
+
+> ✅ General tip: Always update first before installing other software.
+
+---
+
+## Step 4: Enable Extra Repositories (Optional)
+
+Some packages require additional repos:
+
+**Fedora (RPM Fusion Free & Non-Free):**
+
+```bash
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+```
+
+**Arch (Multilib & AUR helper example):**
+
+```bash
+sudo nano /etc/pacman.conf
+# Uncomment [multilib] section and update
+sudo pacman -Syu
+# Optional: Install yay for AUR packages
+sudo pacman -S yay
 ```
 
 ---
 
-## **Step 5: Connect to Wi-Fi**
+## Step 5: Set Up Wi-Fi / Network
 
-If your Wi-Fi isn’t working out of the box, follow these steps:
+Some distros don’t include drivers out-of-the-box. Here’s the general approach:
 
-1. **Find Your Wi-Fi Driver:**
+1. **Identify your network hardware:**
 
-   ```bash
-   lspci | grep -i network
-   ```
+```bash
+lspci | grep -i network
+```
 
-   This will show the Wi-Fi hardware. Note the driver needed.
+2. **Install the driver** using your package manager:
 
-2. **Install the Driver:**
+**Fedora example:**
 
-   ```bash
-   sudo dnf install <driver-package-name>
-   ```
+```bash
+sudo dnf install broadcom-wl
+sudo modprobe wl
+```
 
-   Replace `<driver-package-name>` with the appropriate driver (e.g., `broadcom-wl` for Broadcom cards).
-   (Reboot to apply the changes)
+**Arch example:**
 
-3. **Load the Module:**
+```bash
+sudo pacman -S broadcom-wl-dkms
+sudo modprobe wl
+```
 
-   ```bash
-   sudo modprobe wl
-   ```
-4. **Connect to Wi-Fi:**
-   Use the menu of GNOME in top right to connect to your Wi-Fi network. (logout and login if not working)
+3. **Connect to Wi-Fi** via your desktop environment’s network menu (GNOME, KDE, etc.).
 
 ---
 
-## **Step 6: Clone Your Dotfiles Repository**
+## Step 6: Clone Your Dotfiles Repository
 
 Set up your development environment by cloning your dotfiles:
 
@@ -92,13 +138,35 @@ git clone https://github.com/Deshraj-Tiwari-Official/Fedora-Powerhouse.git ~/dot
 
 ---
 
-## **Step 7: Run the Setup Script**
+## Step 7: Run the Setup Script
 
-Make all the shell scripts recursively executable and run the setup script:
+Make all shell scripts executable and run the main setup script:
 
 ```bash
 find ~/dotfiles -type f -name "*.sh" -exec chmod +x {} +
-~/dotfiles/00_scripts/install.sh
+~/dotfiles/install.sh
 ```
 
-READ the output of the script and follow the instructions to complete the setup.
+> 📌 Read the script output carefully and follow any instructions to complete your setup.
+
+---
+
+## Optional Tips for Any Distro
+
+* Install build tools:
+
+```bash
+# Fedora
+sudo dnf groupinstall "Development Tools" -y
+# Arch
+sudo pacman -S base-devel
+```
+
+* Install Git, curl, wget, and other essentials:
+
+```bash
+# Fedora
+sudo dnf install git curl wget -y
+# Arch
+sudo pacman -S git curl wget
+```
