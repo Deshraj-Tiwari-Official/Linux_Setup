@@ -133,7 +133,7 @@ sudo modprobe wl
 Set up your development environment by cloning your dotfiles:
 
 ```bash
-git clone https://github.com/Deshraj-Tiwari-Official/Fedora-Powerhouse.git ~/dotfiles
+git clone https://github.com/Deshraj-Tiwari-Official/Linux_Setup.git ~/dotfiles
 ```
 
 ---
