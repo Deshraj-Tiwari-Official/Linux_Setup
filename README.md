@@ -98,7 +98,7 @@ Make all the shell scripts recursively executable and run the setup script:
 
 ```bash
 find ~/dotfiles -type f -name "*.sh" -exec chmod +x {} +
-~/dotfiles/00_scripts/setup.sh
+~/dotfiles/00_scripts/install.sh
 ```
 
 READ the output of the script and follow the instructions to complete the setup.
